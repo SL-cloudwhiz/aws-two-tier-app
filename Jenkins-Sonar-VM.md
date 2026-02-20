@@ -1,5 +1,5 @@
 - Install Jenkins
-
+```
 #!/bin/bash
 
 # Exit on any error
@@ -50,9 +50,10 @@ echo "🛠 Initial Admin Password: $JENKINS_PASSWORD"
 echo "💡 Save this password to log in for the first time."
 
 echo "✅ Done!"
-Connect to Jenkins using <EC2_Public_IP:8080>
+```
+## - Connect to Jenkins using <EC2_Public_IP:8080>
 
-Install Below Plugins on Jenkins
+### Install Below Plugins on Jenkins
 
 docker
 terraform
