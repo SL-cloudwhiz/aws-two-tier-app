@@ -63,7 +63,7 @@ aws credentials
 pipeline stage view
 blue ocean ( optional )
 - Install Docker, Trivy, awscli
-
+```
 # Install Trivy
 sudo apt-get install wget apt-transport-https gnupg lsb-release
 wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
@@ -102,4 +102,5 @@ docker images
 
 # List all the Running Docker Containers
 docker ps
-Access Sonarqube <EC2_Public_ip:9000>
+Access Sonarqube <EC2_Public_ip:9000
+```
