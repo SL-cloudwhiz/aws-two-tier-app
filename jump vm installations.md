@@ -1,5 +1,5 @@
- Install AWSCLI, Kubectl, Helm:
-
+## Install AWSCLI, Kubectl, Helm:
+```
 sudo apt install unzip -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
@@ -53,17 +53,18 @@ if [ $? -eq 0 ]; then
 else
     echo "Helm installation failed!"
 fi
-
+```
 - Install the MySQL client
-
+```
 sudo apt install -y mysql-client
+```
 - provide aws credentails using aws configure on ec2
-
+```
 aws configure
-
 access key:
 secret key:
 region: us-east-1
+```
 aws --version
 
 kubectl version --client
@@ -72,78 +73,97 @@ helm version
 
 Connect to your RDS MySQL database
 
-Replace , vijay, and use your actual password when prompted:
-mysql -h <RDS-endpoint> -u vijay -p
+Replace , sou, and use your actual password when prompted:
+`mysql -h <RDS-endpoint> -u sou -p`
+
 When prompted:
-Enter password: <your-RDS-password>
+`Enter password: <your-RDS-password>`
+
 If all the set up is correct (RDS is in same VPC and security group allows access), you’ll be in the MySQL prompt.
 - Connect to AWS EKS Cluster:
 
-aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
+`aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster`
+
 Install Argocd:
+```
 Install Argocd on EKS Cluster:
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
 Verify Argocd Pods, Deployments, Services, Secrets etc…
+```
 kubectl get all -n argocd
 kubectl get secrets -n argocd
+```
 - Expose ArgoCD Server:
 
 By default, the ArgoCD API server is not exposed externally. You can expose it using NodePort (or) LoadBalancer service type:
+```
 kubectl get svc -n argocd
 
-kubectl edit svc argocd-server -n argocd  
+kubectl edit svc argocd-server -n argocd
+```
 - Access Argocd UI using NodePort (or) LoadBalancer -> http://<Public_IP:NodePort>
 
 Log In to ArgoCD:
 
-Get the ArgoCD admin password: The initial password is stored in a Kubernetes secret.
+Get the `ArgoCD admin password`: The initial password is stored in a `Kubernetes secret`.
+```
 kubectl get secrets -n argocd
 kubectl edit secret argocd-initial-admin-secret -n argocd
 
 echo WWxnVHRyVVF4T0Y5WmlncA== | base64 --decode
+```
 Log in to the Argocd UI:
 
-Username: admin
+Username: `admin`
 
-Password: (use the password retrieved from the previous command)
+Password: (`use the password retrieved from the previous command`)
 
 Deploy Your Helm Chart on EKS using Argocd:
 
-Step 1: Generate a GitHub Personal Access Token (PAT)
+Step 1: Generate a `GitHub Personal Access Token (PAT)`
 
-Go to GitHub Settings -> Navigate to Developer Settings → Personal Access Tokens → Generate new token
+Go to GitHub `Settings` -> Navigate to `Developer Settings` → `Personal Access Tokens` → `Generate new token`
 
 Select required scopes:
 
-repo (to access private repositories)
+`repo` (to access private repositories)
 Copy and save the token securely.
 
-Step 2: Add Private GitHub Repo to ArgoCD:
+Step 2: Add `Private GitHub Repo` to `ArgoCD`:
 
 Argocd -> Go to Settings → Repositories → Connect Repo Using HTTPS.
 
 Next Create Application on Argocd
 
-Install Nginx Ingress Controller:
-Add the Helm repository for NGINX Ingress Controller:
+##Install Nginx Ingress Controller:
+- Add the Helm repository for NGINX Ingress Controller:
+```
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 helm repo ls
-Install the NGINX Ingress Controller using Helm:
+```
+- Install the NGINX Ingress Controller using Helm:
+```
 kubectl create namespace ingress-nginx
 
 helm install ingress-nginx ingress-nginx/ingress-nginx \
   --namespace ingress-nginx \
   --set controller.publishService.enabled=true
+```
 controller.publishService.enabled=true allows it to work properly with AWS LoadBalancer.
+
 Verify the installation:
+```
 helm ls -A
 
 helm status ingress-nginx -n  ingress-nginx
 
 kubectl get all -n ingress-nginx
+```
 vim ingress.yaml
+```
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -163,25 +183,35 @@ spec:
             name: frontend-service  
             port:
               number: 3000
-verify Ingress:
+```
+###verify Ingress:
+```
 kubectl get ingress
 kubectl describe ingressmyapp-ingress
-Install Cert-manager:
-Add the Jetstack Helm repository:
+```
+###Install Cert-manager:
+- Add the Jetstack Helm repository:
+```
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 helm repo ls
+```
 Install cert-manager:
 
 Apply the Cert-Manager CRDs:
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.11.0/cert-manager.crds.yaml
-Install Cert-Manager using Helm:
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.11.0
-Verify that cert-manager is running:
-kubectl get pods -n cert-manager
-All pods in the cert-manager namespace should be in the Running state.
-vim cluster-issuer.yaml
 
+`kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.11.0/cert-manager.crds.yaml`
+
+Install Cert-Manager using Helm:
+
+`helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.11.0`
+- Verify that cert-manager is running:
+
+`kubectl get pods -n cert-manager`
+
+All pods in the cert-manager namespace should be in the Running state.
+vim `cluster-issuer.yaml`
+```
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -196,14 +226,16 @@ spec:
     - http01:
         ingress:
           class: nginx
-Apply the ClusterIssuer:
-kubectl apply -f cluster-issuer.yaml
+```
+###Apply the ClusterIssuer:
+`kubectl apply -f cluster-issuer.yaml`
+
 3. Update the Ingress Resource for HTTPS:
 
 Now, let's modify your Ingress resource to use cert-manager to automatically obtain a TLS certificate for <your website>in.
 
 vim ingress.yaml
-
+```
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -229,15 +261,20 @@ spec:
                 name: frontend-service  
                 port:
                   number: 3000
-Apply the Updated Ingress Resource:
+```
+###Apply the Updated Ingress Resource:
+```
 kubectl apply -f ingress.yaml
 kubectl get ingress
 kubectl describe ingress hello-ingress
+```
 Cert-manager will now request a certificate from Let's Encrypt. You can check the status of the certificate by running:
+```
 kubectl get certificate
-kubectl describe certificate vijaygiduthuri-tls
-Verify HTTPS Access:
+kubectl describe certificate sou-tls
+```
+###Verify HTTPS Access:
 
-Once the certificate is issued and configured, access your site using https://www.yourwebsite.com
+- Once the certificate is issued and configured, access your site using https://www.yourwebsite.com
 
-This will automatically redirect HTTP traffic to HTTPS, ensuring all connections are secure.
+- This will automatically redirect HTTP traffic to HTTPS, ensuring all connections are secure.
