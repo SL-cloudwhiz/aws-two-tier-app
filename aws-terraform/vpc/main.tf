@@ -48,7 +48,6 @@ module "ec2" {
   instance_type      = "t2.micro"
   subnet_id          = element(module.vpc.public_subnet_ids, 0)
   security_group_ids = [module.security_group.sg_ec2_sg_ssh_http_id]
-  key_name           = "project-keypair2025"  # create keypair manually & update name here
 }
 
 module "eks" {
