@@ -66,7 +66,7 @@
     <input id="name" placeholder="Name" /><br>
     <input id="from" placeholder="Traveling From" /><br>
     <input id="to" placeholder="Destination" /><br>
-    <input id="seat preference" placeholder="Seat Preference" /><br>
+    <input id="seat" placeholder="Seat Preference" /><br>
     <button onclick="submitData()">Submit</button>
     <p id="result"></p>
   </div>
@@ -77,7 +77,7 @@
         name: document.getElementById('name').value,
         travelingFrom: document.getElementById('from').value,
         destination: document.getElementById('to').value,
-        seat: document.getElementById('seat').value
+        seatPreference: document.getElementById('seat').value
       };
 
       const response = await fetch('/submit', {
@@ -92,4 +92,5 @@
   </script>
 </body>
 </html>
+
 
