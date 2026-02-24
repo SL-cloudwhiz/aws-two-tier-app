@@ -44,8 +44,8 @@ app.post('/store', (req, res) => {
   }
 
   db.query(
-    'INSERT INTO bookings (name, travelingFrom, destination, email, seatPreference) VALUES (?, ?, ?, ?)',
-    [name, travelingFrom, destination, email, seatPreference],
+    'INSERT INTO bookings (name, travelingFrom, destination, seatPreference) VALUES (?, ?, ?, ?)',
+    [name, travelingFrom, destination, seatPreference],
     (err, result) => {
       if (err) {
         console.error('Insert error:', err);
