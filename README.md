@@ -1,5 +1,9 @@
 **Railway Ticket Booking Application on AWS EKS**
 
+
+<img width="1536" height="1024" alt="architecture" src="https://github.com/user-attachments/assets/7921b20b-3bb5-4460-acaa-10d6a1a182c7" />
+
+
 This project illustrates the deployment of a two-tier web application on AWS Elastic Kubernetes Service (EKS) using modern DevOps tools and best practices.
 It showcases how frontend and backend services can be containerized, orchestrated, and deployed in a scalable and secure Kubernetes environment.
 
