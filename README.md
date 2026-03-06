@@ -31,7 +31,7 @@ Railway Ticket Booking Application implements the following workflow:
 
 🌐 **Jenkins Pipeline Overview**
 
-Pipeline 1: Application CI/CD
+**Pipeline 1: Application CI/CD**
 
 This pipeline handles the complete build, scan, and deployment workflow for the application:
 - Pulls frontend and backend source code from GitHub
@@ -43,7 +43,7 @@ This pipeline handles the complete build, scan, and deployment workflow for the 
 - Clones the Helm charts repository and dynamically updates image tags
 - Triggers deployment updates via ArgoCD using a GitOps workflow
 
-Pipeline 2: Infrastructure Provisioning
+**Pipeline 2: Infrastructure Provisioning**
 
 This pipeline automates the end-to-end provisioning of cloud infrastructure:
 - Provisions AWS infrastructure using Terraform, including:
@@ -66,13 +66,13 @@ A fully deployed Railway Ticket Booking app accessible via a custom domain over 
 
 2. Connect to EC2 ( jump-server ) & Install kubectl, helm, awscli -> after provide aws creds on ec2 using "aws configure"
 
-3. update RDS Endpoint on K8s -> backend-deployment.yaml -> DB_HOST
+3. Update RDS Endpoint on K8s -> backend-deployment.yaml -> DB_HOST
 
 4. Create 2 ECR Repositorys Manually: 1. frontend-repo, 2. backend-repo
 
   - Now build frontend & backend Docker images and push to AWS ECR Repos:
 
-  - login to AWS ECR
+  - Login to AWS ECR
 
 ```
 cd frontend
@@ -90,11 +90,11 @@ docker push 657001761946.dkr.ecr.us-east-1.amazonaws.com/backend-repo:latest
 cd k8s
 kubectl apply -f .
 ```
-  - check "frontend & backend service are running or not"
+  - Check "frontend & backend service are running or not"
 
 `kubectl get all`
 
-6. access "frontend ui" using "LoadBalancer" DNS Name & provide inputs like "Name, Travelling from, Destination, Seat Preference" & check all the data on "backend"
+6. Access "frontend ui" using "LoadBalancer" DNS Name & provide inputs like "Name, Travelling from, Destination, Seat Preference" & check all the data on "backend"
 <img width="1146" height="595" alt="Screenshot 2026-03-06 115829" src="https://github.com/user-attachments/assets/58a6182f-99d3-4fb0-9954-5dbf79c08551" />
 
 
