@@ -48,15 +48,16 @@ Pipeline 2: Infrastructure Provisioning
 This pipeline automates the end-to-end provisioning of cloud infrastructure:
 - Provisions AWS infrastructure using Terraform, including:
   - VPC, Subnets, Route Tables, and Internet Gateway, EC2 (Ubuntu Jumpbox) for management access, RDS (MySQL) database and      EKS cluster
-  - Installs ArgoCD on the EKS cluster and integrates the Helm charts repository
-  - Deploys the NGINX Ingress Controller and exposes services via an AWS Load Balancer
-  - Maps the Load Balancer DNS to a GoDaddy-managed domain
-  - Secures external access with TLS/HTTPS using cert-manager
+- Installs ArgoCD on the EKS cluster and integrates the Helm charts repository
+- Deploys the NGINX Ingress Controller and exposes services via an AWS Load Balancer
+- Maps the Load Balancer DNS to a GoDaddy-managed domain
+- Secures external access with TLS/HTTPS using cert-manager
 
 **Final Output:**
 A fully deployed Railway Ticket Booking app accessible via a custom domain over HTTPS, running on scalable kubernetes infrastruture on AWS!
 
-<img width="1891" height="982" alt="Screenshot 2026-02-25 082748" src="https://github.com/user-attachments/assets/80bd8013-975c-4af0-ba8d-19205d1a64b8" />
+<img width="1146" height="595" alt="Screenshot 2026-03-06 115829" src="https://github.com/user-attachments/assets/711fb1c6-4b8a-48c8-af45-c82a7f011cc2" />
+
 <img width="681" height="264" alt="Screenshot 2026-02-25 085246" src="https://github.com/user-attachments/assets/1f377215-754b-44eb-b121-2d74ce7a0c29" />
 
 ---
@@ -94,7 +95,8 @@ kubectl apply -f .
 `kubectl get all`
 
 6. access "frontend ui" using "LoadBalancer" DNS Name & provide inputs like "Name, Travelling from, Destination, Seat Preference" & check all the data on "backend"
-<img width="1891" height="982" alt="Screenshot 2026-02-25 082748" src="https://github.com/user-attachments/assets/80bd8013-975c-4af0-ba8d-19205d1a64b8" />
+<img width="1146" height="595" alt="Screenshot 2026-03-06 115829" src="https://github.com/user-attachments/assets/58a6182f-99d3-4fb0-9954-5dbf79c08551" />
+
 
   - Connect to ec2 ( jump server ) & Install MySQL and check your data
 ```
@@ -109,8 +111,8 @@ password: Password123
 show databases;
 use appdb;
 show tables;
-```
 select * from bookings;
+```
 
 <img width="681" height="264" alt="Screenshot 2026-02-25 085246" src="https://github.com/user-attachments/assets/1f377215-754b-44eb-b121-2d74ce7a0c29" />
 
