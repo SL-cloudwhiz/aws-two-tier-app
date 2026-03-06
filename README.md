@@ -1,4 +1,4 @@
-**Railway Ticket Booking Application on AWS EKS**
+# Railway Ticket Booking Application on AWS EKS
 
 
 <img width="1536" height="1024" alt="architecture" src="https://github.com/user-attachments/assets/7921b20b-3bb5-4460-acaa-10d6a1a182c7" />
@@ -20,24 +20,14 @@ Railway Ticket Booking Application implements the following workflow:
 
 🏗 **Architecture Highlights**
 
-Two-Tier Architecture
-- Frontend service for user interaction
-- Backend service for business logic and database operations
-- Kubernetes-Based Deployment
-- Applications deployed on AWS EKS
-- Service-to-service communication using Kubernetes DNS
-- Configuration and secrets managed using Kubernetes Secrets
-- AWS infrastructure provisioned using Terraform
-- Version-controlled, repeatable, and environment-agnostic setup
+- **Two-Tier Architecture:** Frontend handles user interaction while the backend manages business logic and database operations.
+- **Kubernetes Deployment:** Application deployed on AWS EKS with service-to-service communication via Kubernetes DNS and configuration managed using Kubernetes Secrets.
+- **Infrastructure as Code:** AWS infrastructure provisioned using Terraform for a version-controlled and environment-agnostic setup.
 
 🔄 **CI/CD & Automation**
 
-- Continuous Integration
-- Automated build pipelines using Jenkins
-- Docker images built, scanned, and pushed to a container registry
-- Continuous Delivery
-- Kubernetes deployments managed with Helm
-- ArgoCD used for GitOps-based continuous delivery
+- **Continuous Integration:** Jenkins pipelines automate building, scanning, and pushing Docker images to a container registry.
+- **Continuous Delivery:** Helm manages Kubernetes deployments while ArgoCD enables GitOps-based continuous delivery.
 
 🌐 **Jenkins Pipeline Overview**
 
@@ -57,25 +47,11 @@ Pipeline 2: Infrastructure Provisioning
 
 This pipeline automates the end-to-end provisioning of cloud infrastructure:
 - Provisions AWS infrastructure using Terraform, including:
-  - VPC, Subnets, Route Tables, and Internet Gateway
-  - EC2 (Ubuntu Jumpbox) for management access
-  - Amazon RDS (MySQL) database
-  - Amazon EKS Kubernetes cluster
+  - VPC, Subnets, Route Tables, and Internet Gateway, EC2 (Ubuntu Jumpbox) for management access, RDS (MySQL) database and      EKS cluster
   - Installs ArgoCD on the EKS cluster and integrates the Helm charts repository
   - Deploys the NGINX Ingress Controller and exposes services via an AWS Load Balancer
   - Maps the Load Balancer DNS to a GoDaddy-managed domain
   - Secures external access with TLS/HTTPS using cert-manager
-
- **Repository Structure**
-
-This project follows a multi-repository approach:
-
-- Application & Infrastructure Repository
-- Frontend and backend application code
-- Terraform scripts for AWS infrastructure provisioning
-- Helm Charts Repository
-- Helm charts used for deploying applications to EKS
-
 
 **Final Output:**
 A fully deployed Railway Ticket Booking app accessible via a custom domain over HTTPS, running on scalable kubernetes infrastruture on AWS!
@@ -114,6 +90,7 @@ cd k8s
 kubectl apply -f .
 ```
   - check "frontend & backend service are running or not"
+
 `kubectl get all`
 
 6. access "frontend ui" using "LoadBalancer" DNS Name & provide inputs like "Name, Travelling from, Destination, Seat Preference" & check all the data on "backend"
@@ -134,6 +111,7 @@ use appdb;
 show tables;
 ```
 select * from bookings;
+
 <img width="681" height="264" alt="Screenshot 2026-02-25 085246" src="https://github.com/user-attachments/assets/1f377215-754b-44eb-b121-2d74ce7a0c29" />
 
 7. To Destroy entire resources
