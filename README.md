@@ -79,3 +79,62 @@ This project follows a multi-repository approach:
 
 **Final Output:**
 A fully deployed Railway Ticket Booking app accessible via a custom domain over HTTPS, running on scalable kubernetes infrastruture on AWS!
+
+<img width="1891" height="982" alt="Screenshot 2026-02-25 082748" src="https://github.com/user-attachments/assets/80bd8013-975c-4af0-ba8d-19205d1a64b8" />
+<img width="681" height="264" alt="Screenshot 2026-02-25 085246" src="https://github.com/user-attachments/assets/1f377215-754b-44eb-b121-2d74ce7a0c29" />
+
+---
+
+1. Create AWS Infra using Terraform: VPC, EC2, EKS, RDS
+
+2. Connect to EC2 ( jump-server ) & Install kubectl, helm, awscli -> after provide aws creds on ec2 using "aws configure"
+
+3. update RDS Endpoint on K8s -> backend-deployment.yaml -> DB_HOST
+
+4. Create 2 ECR Repositorys Manually: 1. frontend-repo, 2. backend-repo
+
+  - Now build frontend & backend Docker images and push to AWS ECR Repos:
+
+  - login to AWS ECR
+
+```
+cd frontend
+docker build -t frontend:latest
+docker tag frontend:latest 657001761946.dkr.ecr.us-east-1.amazonaws.com/frontend-repo:latest
+docker push 657001761946.dkr.ecr.us-east-1.amazonaws.com/frontend-repo:latest
+
+cd backend
+docker build -t backend:latest
+docker tag backend:latest 657001761946.dkr.ecr.us-east-1.amazonaws.com/backend-repo:latest
+docker push 657001761946.dkr.ecr.us-east-1.amazonaws.com/backend-repo:latest
+```
+5. Update Images on "K8s yamls" and also provide "rds database credentails" on backend-deployment.yaml & apply them
+```
+cd k8s
+kubectl apply -f .
+```
+  - check "frontend & backend service are running or not"
+`kubectl get all`
+
+6. access "frontend ui" using "LoadBalancer" DNS Name & provide inputs like "Name, Travelling from, Destination, Seat Preference" & check all the data on "backend"
+<img width="1891" height="982" alt="Screenshot 2026-02-25 082748" src="https://github.com/user-attachments/assets/80bd8013-975c-4af0-ba8d-19205d1a64b8" />
+
+  - Connect to ec2 ( jump server ) & Install MySQL and check your data
+```
+sudo apt install -y mysql-client
+mysql -h <RDS-endpoint> -u sou -p
+```
+  - Example:
+```
+mysql -h my-rds-instance.ce9wya4k41zv.us-east-1.rds.amazonaws.com -u sou -p
+password: Password123
+
+show databases;
+use appdb;
+show tables;
+```
+select * from bookings;
+<img width="681" height="264" alt="Screenshot 2026-02-25 085246" src="https://github.com/user-attachments/assets/1f377215-754b-44eb-b121-2d74ce7a0c29" />
+
+7. To Destroy entire resources
+`terraform destroy --auto-approve`
